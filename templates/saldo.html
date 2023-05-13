@@ -1,0 +1,27 @@
+{% extends 'base.html' %} {% block title %}saldo{% endblock %}
+{% block heading %}
+<h1 class="header__heading">Saldo</h1>
+{% endblock %} {% block content %}
+<section class="saldo">
+  <h2 class="header__heading header__heading--small">
+    Obecny stan konta: {{ saldo }} zł
+  </h2>
+  <fieldset class="form">
+    <legend class="form__legend">Zmień saldo</legend>
+    <form class="form__form" action="/saldo" method="post">
+      <label for="saldo">Podaj kwotę</label>
+      <input class="form__input" type="number" id="saldo" name="kwota" required />
+      <div>
+        <input class="form__input" type="radio" id="dodaj" name="opcja_saldo" value="dodaj" checked>
+        <label class="form__label" for="dodaj">Dodaj</label>
+      </div>
+      <div>
+        <input class="form__input" type="radio" id="odejmij" name="opcja_saldo" value="odejmij">
+        <label class="form__label" for="odejmij">Odejmij</label>
+      </div>
+
+      <button class="form__btn" type="submit">Zapisz</button>
+    </form>
+  </fieldset>
+</section>
+{% endblock %}

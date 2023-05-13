@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en, pl">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>{% block title %}księgowy{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&family=Roboto&display=swap"
+    rel="stylesheet" />
+  <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/png" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css', _external=True) }}" />
+</head>
+
+<body>
+  <header class="header">
+    <div class="header__logo">
+      <img src="{{url_for('static', filename='images/accountant.jpg')}}" width="200" height="80" class="header__img"
+        alt="logo accountant" />
+    </div>
+    {% block heading %}
+    <h1 class="header__heading">Witaj w aplikacji Księgowy</h1>
+    {% endblock %}
+  </header>
+
+  <nav class="menu">
+    <ul class="menu__list">
+      <li class="menu__list-item">
+        <a href="/" class="menu__list-link">Strona główna</a>
+      </li>
+      <li class="menu__list-item">
+        <a href="/historia" class="menu__list-link">Historia</a>
+      </li>
+      <li class="menu__list-item">
+        <a href="/zakup" class="menu__list-link">Zakup</a>
+      </li>
+      <li class="menu__list-item">
+        <a href="/sprzedaż" class="menu__list-link">Sprzedaż</a>
+      </li>
+      <li class="menu__list-item">
+        <a href="/saldo" class="menu__list-link">Zmiana salda</a>
+      </li>
+    </ul>
+  </nav>
+
+  {% block content %} {% endblock %}
+</body>
+
+</html>

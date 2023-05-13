@@ -1,0 +1,58 @@
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #4f4848;
+
+  &__logo {
+   margin-right: auto;
+  }
+
+  &__img {
+    margin: 20px;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+  }
+
+  &__heading {
+    width: 100%;
+    text-align: center;
+    margin-left: -50px;
+    font-size: 3.5rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+    color: #fff;
+    
+    &--small {
+      margin-top: 10px;
+      margin-left: 10px;
+      letter-spacing: 2px;
+      color: #333;
+      text-align: center;
+    }
+  }
+}
+
+.menu {
+  width: 100%;
+  height: 5vh;
+  background-color: #4f4848;
+
+  &__list {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    list-style: none;
+
+    &-link {
+      text-decoration: none;
+      color: #fff;
+      font-size: 1.6rem;
+      letter-spacing: 1px;
+      &:hover {
+        color: chocolate;
+      }
+    }
+  }
+}

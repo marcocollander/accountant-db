@@ -1,0 +1,23 @@
+@use "var";
+
+*, *::after, *::before{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root{
+  height: 100vh;
+  background-color: cyan;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-size: 62.5%;
+  font-family: var.$current-font
+}
+
+body {
+  height: 100%;
+  padding: 0 0 20px 0;
+  background-color: cornsilk;
+}
+

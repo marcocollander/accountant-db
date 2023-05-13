@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+<title>{% block title %}historia{% endblock %}</title>
+{% block heading %}
+<h1 class="header__heading">Historia</h1>
+{% endblock %}
+{% block content %}
+<section class="history">
+  <h3 class="history__heading history__heading--small">{{ error }}</h3>
+
+  <article class="history__article">
+    <table>
+      <thead>
+        <tr>
+          <th colspan="3">Historia</th>
+        </tr>
+      </thead>
+      <tr>
+        <th scope="col">Operacja</th>
+        <th scope="col">Komunikat</th>
+        <th scope="col">Data</th>
+      </tr>
+      <tbody>
+        {% for elem in history %}
+        <tr>
+          <td>{{ elem.operation }}</td>
+          <td>{{ elem.message }}</td>
+          <td>{{ elem.timestamp }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </article>
+</section>
+{% endblock %}

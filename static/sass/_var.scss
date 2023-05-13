@@ -1,0 +1,23 @@
+//font-family: 'Roboto', sans-serif;
+//font-family: 'Open Sans', sans-serif;
+
+$main-font: 'Open Sans', sans-serif;
+$current-font: Roboto, sans-serif;
+
+@mixin input($top){
+  margin-top: $top;
+  padding: 5px;
+  font-size: 2rem;
+}
+
+@mixin label($top, $left){
+  margin-top: $top;
+  margin-left: $left;
+  letter-spacing: 1px;
+}
+
+@mixin heading(){
+  font-weight: 400;
+  font-size: 2.5rem;
+  text-align: center;
+}

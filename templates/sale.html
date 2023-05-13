@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+<title>{% block title %}sprzedaż{% endblock %}</title>
+{% block heading %}
+<h1 class="header__heading">Sprzedaż</h1>
+{% endblock %}
+
+{% block content %}
+<section class="purchase">
+  <article class="purchase__article">
+    <fieldset class="form">
+      <legend>Podaj co chcesz sprzedać:</legend>
+      <form class="form__form" action="/sprzedaż" method="post">
+        <div class="form__box">
+          <label class="form__label--vertical" for="product">Podaj nazwę
+            produktu</label>
+          <input class="form__input--vertical" type="text" id="product" name="product" required>
+        </div>
+
+        <div class="form__box">
+          <label class="form__label--vertical" for="quantity">Podaj ilość
+            produktu</label>
+          <input class="form__input--vertical" type="number" id="quantity" name="quantity" required>
+        </div>
+
+        <button class="form__btn" type="submit">Sprzedaż</button>
+      </form>
+    </fieldset>
+    <div class="purchase__message">
+      {{ message }}
+    </div>
+  </article>
+</section>
+
+{% endblock %}
