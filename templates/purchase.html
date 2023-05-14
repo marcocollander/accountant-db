@@ -19,7 +19,7 @@
           <div class="form__box">
             <label class="form__label--vertical" for="price">Podaj cenę
               produktu</label>
-            <input class="form__input--vertical" type="number" id="price"
+            <input class="form__input--vertical" type="text" id="price"
                    name="price" required>
           </div>
 
@@ -38,5 +38,8 @@
       </div>
     </article>
   </section>
-
-{% endblock %}
+  {% endblock %}
+  {% block scripts %}
+  <script src="{{url_for('static', filename='js/purchase.js')}}"></script>
+  
+  {% endblock %}
