@@ -6,6 +6,14 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///warehouse.db"
 db.init_app(app)
 
 
+def add_to_database(account, new_event, product=None):
+    db.session.add(account)
+    if product is not None:
+        db.session.add(product)
+    db.session.add(new_event)
+    db.session.commit()
+
+
 def product_ceate(name, price, quantity):
     products = Products.query.all()
     for product in products:
@@ -16,49 +24,51 @@ def product_ceate(name, price, quantity):
             return product
         else:
             pass
-    
+
     return Products(name=name, price=price, quantity=quantity)
-    
-    
+
+
 @app.route("/")
 def index():
     account = Account.query.first()
     products = Products.query.all()
     saldo = account.balance
-    saldo = f'{saldo:.2f}'
-    
+    saldo = f"{saldo:.2f}"
+
     return render_template("index.html", saldo=saldo, magazyn=products)
 
 
 @app.route("/saldo", methods=["GET", "POST"])
 def saldo():
     account = Account.query.first()
+
     if request.method == "POST":
         opcja_saldo = request.form["opcja_saldo"]
+
         if opcja_saldo == "dodaj":
             kwota = float(request.form["kwota"])
-            # account = Account.query.first()
             account.balance += kwota
+
             new_event = add_event(
                 "saldo",
-                f" Dodano {kwota:.2f} zł, stan po operacji: {account.balance}",
+                f" Dodano {kwota:.2f} zł, stan po operacji: {account.balance:.2f}",
             )
-            db.session.add(account)
-            db.session.add(new_event)
-            db.session.commit()
+
+            add_to_database(account=account, new_event=new_event)
         elif opcja_saldo == "odejmij":
             kwota = float(request.form["kwota"])
-            # account = Account.query.first()
             account.balance -= kwota
+
             new_event = add_event(
-                "saldo", f" Odjęto {kwota:.2f} zł, stan po operacji: {account.balance:.2f}"
+                "saldo",
+                f" Odjęto {kwota:.2f} zł, stan po operacji: {account.balance:.2f}",
             )
-            db.session.add(account)
-            db.session.add(new_event)
-            db.session.commit()
+
+            add_to_database(account=account, new_event=new_event)
         else:
             print("Nieprawidłowa opcja dla operacji saldo\n")
-    saldo = f'{account.balance:.2f}'
+
+    saldo = f"{account.balance:.2f}"
     return render_template("saldo.html", saldo=saldo)
 
 
@@ -81,12 +91,12 @@ def history(od=None, do=None):
 @app.route("/zakup", methods=["GET", "POST"])
 def purchase():
     account = Account.query.first()
-    
+
     if request.method == "POST":
         if account.balance != 0:
             name = request.form["product"]
             price = float(request.form["price"])
-            quantity = float(request.form["quantity"])
+            quantity = int(request.form["quantity"])
             purchase_cost = price * quantity
             if account.balance >= purchase_cost:
                 product = product_ceate(name, price, quantity)
@@ -95,13 +105,11 @@ def purchase():
                     "zakup",
                     f"kupiono {quantity} szt. {name} za {price:.2f} zł",
                 )
-                db.session.add(account)
-                db.session.add(product)
-                db.session.add(new_event)
-                db.session.commit()
+
+                add_to_database(account=account, new_event=new_event, product=product)
                 message = (
-                    f"Dokonałeś zakupu: {name} - cena:{price:.2f} zł, "
-                    f"ilość: {quantity}. Saldo po operacji:"
+                    f"Dokonałeś zakupu: {name} - cena: {price:.2f} zł, "
+                    f"ilość: {quantity} szt. Saldo po operacji:"
                     f" {account.balance:.2f} zł"
                 )
             else:
@@ -117,26 +125,45 @@ def purchase():
 @app.route("/sprzedaż", methods=["GET", "POST"])
 def sale():
     message = "Nie dokonano jeszcze sprzedaży"
+
     if request.method == "POST":
         product = request.form["product"]
         quantity = int(request.form["quantity"])
         account = Account.query.first()
         products = Products.query.all()
+
         for item in products:
             if item.name == product:
                 if item.quantity > quantity:
                     account.balance += item.price
                     item.quantity -= quantity
-                    db.session.add(item)
-                    db.session.add(account)
-                    db.session.commit()
+
+                    message = f"Sprzedano {product} {quantity} szt po {item.price} zł za sztukę. Saldo po operacji: {account.balance:.2f} zł"
+                    new_event = add_event(
+                        "sprzedaż",
+                        f"sprzedaż -> Sprzedano {quantity} szt. {product} za  {item.price:.2f} zł",
+                    )
+
+                    add_to_database(account=account, new_event=new_event, product=item)
+
                 elif item.quantity == quantity:
+                    account.balance += item.price
+                    message = f"Sprzedano {product} {quantity} szt po {item.price} zł za sztukę. Saldo po operacji: {account.balance:.2f} zł"
+                    new_event = add_event(
+                        "sprzedaż",
+                        f"sprzedaż -> Sprzedano {quantity} szt. {product} za  {item.price:.2f} zł",
+                    )
+
                     db.session.delete(item)
-                    db.session.commit()
-                message = f'Sprzedano {product} {quantity} szt po {item.price} zł za sztukę. Saldo po operacji: {account.balance:.2f} zł'
-                new_event = add_event('sprzedaż', f'sprzedaż -> Sprzedano {quantity} szt. {product} za  {item.price:.2f} zł')
-                db.session.add(new_event)
-                db.session.commit()
+                    add_to_database(account=account, new_event=new_event)
+
+                else:
+                    message = (
+                        f"Na magazynie jest tylko {item.quantity} sztuk tego towaru"
+                    )
+
+    else:
+        message = "Nie dokonano jeszcze sprzedaży"
 
     return render_template("sale.html", message=message)
 
