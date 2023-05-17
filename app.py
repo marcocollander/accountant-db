@@ -135,7 +135,7 @@ def sale():
         for item in products:
             if item.name == product:
                 if item.quantity > quantity:
-                    account.balance += item.price
+                    account.balance += quantity * item.price
                     item.quantity -= quantity
 
                     message = f"Sprzedano {product} {quantity} szt po {item.price} zł za sztukę. Saldo po operacji: {account.balance:.2f} zł"
@@ -147,7 +147,7 @@ def sale():
                     add_to_database(account=account, new_event=new_event, product=item)
 
                 elif item.quantity == quantity:
-                    account.balance += item.price
+                    account.balance += quantity * item.price
                     message = f"Sprzedano {product} {quantity} szt po {item.price} zł za sztukę. Saldo po operacji: {account.balance:.2f} zł"
                     new_event = add_event(
                         "sprzedaż",
